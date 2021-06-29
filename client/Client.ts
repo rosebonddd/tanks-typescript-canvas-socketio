@@ -9,7 +9,7 @@ import { Utilities } from "../shared/Utilities";
 export class Client {
     public static shared: Client;
 
-    public static TITLE_TEXT: string = "Tanks!";
+    public static TITLE_TEXT: string = "Coolio!";
 
     public canvas: HTMLCanvasElement;
 
@@ -280,8 +280,8 @@ export class Client {
                     instructions[i],
                     -this.screenWidth / 2 + 20,
                     this.screenHeight / 2 -
-                        20 -
-                        (instructions.length - i - 1) * 50
+                    20 -
+                    (instructions.length - i - 1) * 50
                 );
             }
             ctx.restore();
