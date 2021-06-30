@@ -6,13 +6,21 @@ import { GameState } from "../shared/Game";
 export class Connection {
     public socket: Socket;
 
+    public isDisconnected: boolean = false;
     public isConnected: boolean = false;
 
     public constructor(
         private _client: Client,
         public lobby: RIVET.MatchmakerLobby
     ) {
-        this.socket = io(`${lobby.ports[0].hostname}:${lobby.ports[0].source}`);
+        // Prefer TLS-enabled port but fall back to default port for development
+        let port = lobby.ports.find(x => x.isTls) || lobby.ports[0];
+
+        this.socket = io(`${port.hostname}:${port.source}`, {
+            transports: ["websocket"],
+            reconnectionDelay: 250,
+            reconnectionDelayMax: 1000,
+        });
         this.socket.on(
             "connect",
             this._onConnect.bind(this, lobby.player.token)
@@ -22,6 +30,8 @@ export class Connection {
     }
 
     private _onConnect() {
+        this.isDisconnected = false;
+
         console.log("Initiating...");
         this.socket.emit(
             "init",
@@ -40,6 +50,7 @@ export class Connection {
     }
 
     private _onDisconnect() {
+        this.isDisconnected = true;
         this.isConnected = false;
     }
 }
