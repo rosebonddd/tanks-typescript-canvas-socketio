@@ -21,6 +21,8 @@ export class Bullet {
     public constructor(private game: Game, public state: BulletState) {}
 
     public update(dt: number) {
+        this.state.velocityY -= 5000 * dt;
+        
         // Move bullet
         this.state.positionX += this.state.velocityX * dt;
         this.state.positionY += this.state.velocityY * dt;
