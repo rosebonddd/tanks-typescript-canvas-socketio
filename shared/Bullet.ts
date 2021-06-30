@@ -10,6 +10,7 @@ export interface BulletState {
     positionY: number;
     velocityX: number;
     velocityY: number;
+    bounces: number;
 }
 
 export class Bullet {
@@ -21,21 +22,30 @@ export class Bullet {
     public constructor(private game: Game, public state: BulletState) {}
 
     public update(dt: number) {
-        this.state.velocityY -= 5000 * dt;
         
         // Move bullet
         this.state.positionX += this.state.velocityX * dt;
         this.state.positionY += this.state.velocityY * dt;
 
+        if (this.state.positionX > this.game.arenaSize / 2) {
+            this.state.velocityX = -Math.abs(this.state.velocityX);
+            this._didBounce();
+        }
+        if (this.state.positionX < -this.game.arenaSize / 2) {
+            this.state.velocityX = Math.abs(this.state.velocityX);
+            this._didBounce();
+        }
+        if (this.state.positionY > this.game.arenaSize / 2) {
+            this.state.velocityY = -Math.abs(this.state.velocityY);
+            this._didBounce();
+        }
+        if (this.state.positionY < -this.game.arenaSize / 2) {
+            this.state.velocityY = Math.abs(this.state.velocityY);
+            this._didBounce();
+        }
+        
         if (this.game.isServer) {
             // Check if collided with border
-            if (
-                Math.abs(this.state.positionX) > this.game.arenaSize / 2 ||
-                Math.abs(this.state.positionY) > this.game.arenaSize / 2
-            ) {
-                this.game.removeBullet(this.state.id);
-            }
-
             // Check if collided with another player
             for (let player of this.game.players) {
                 if (
@@ -85,5 +95,12 @@ export class Bullet {
     private _onPlayerCollision(player: Player) {
         player.damage(this.damage, this.state.shooterId);
         this.game.removeBullet(this.state.id);
+    }
+
+    private _didBounce() {
+        this.state.bounces += 1;
+        if (this.game.isServer && this.state.bounces > 1) {
+            this.game.removeBullet(this.state.id);
+        }
     }
 }
