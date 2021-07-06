@@ -5,6 +5,7 @@ import * as tankBarrelRedUrl from "./assets/tankRed_barrel1_outline.png";
 import * as tankBarrelBlueUrl from "./assets/tankBlue_barrel1_outline.png";
 import * as bulletUrl from "./assets/shotRed.png";
 import * as wallUrl from "./assets/barricadeWood.png";
+import * as barrelURL from "./assets/barrelBlack_top.png";
 
 export class Assets {
     public scaleFactor = 1;
@@ -16,6 +17,7 @@ export class Assets {
     public tankBarrelBlue = this._load(tankBarrelBlueUrl);
     public bullet = this._load(bulletUrl);
     public wall = this._load(wallUrl);
+    public barrel = this._load(wallUrl);
 
     private _load(url: string): HTMLImageElement {
         let img = new Image();
