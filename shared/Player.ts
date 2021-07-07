@@ -15,7 +15,7 @@ export interface PlayerState extends EntityState {
     score: number;
 }
 
-export const PLAYER_MOVE_SPEED: number = 500;
+let PLAYER_MOVE_SPEED: number = 500;
 export const PLAYER_RADIUS: number = 38;
 export const BARREL_LENGTH: number = 45;
 
@@ -39,6 +39,7 @@ export function createPlayer(game: Game): PlayerState {
         score: 0,
     };
     game.state.players[state.id] = state;
+    PLAYER_MOVE_SPEED = 500;
     return state;
 }
 
@@ -94,9 +95,9 @@ export function renderPlayer(
     ctx.save();
     ctx.rotate(state.aimDir + Math.PI / 2);
     let barrelWidth =
-        client.assets.tankBarrelRed.width * client.assets.scaleFactor;
+        client.assets.tankBarrelBlue.width * client.assets.scaleFactor;
     let barrelHeight =
-        client.assets.tankBarrelRed.height * client.assets.scaleFactor;
+        client.assets.tankBarrelBlue.height * client.assets.scaleFactor;
     ctx.drawImage(
         client.assets.tankBarrelRed,
         -barrelWidth / 2,
@@ -175,6 +176,7 @@ function onPlayerKill(game: Game, state: PlayerState, killerId?: number) {
         let killer = game.state.players[killerId];
         if (killer) {
             killer.score += 1;
+            PLAYER_MOVE_SPEED += 200;
         }
     }
 

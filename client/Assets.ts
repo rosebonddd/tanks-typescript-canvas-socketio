@@ -5,7 +5,7 @@ import * as tankBarrelRedUrl from "./assets/tankRed_barrel1_outline.png";
 import * as tankBarrelBlueUrl from "./assets/tankBlue_barrel1_outline.png";
 import * as bulletUrl from "./assets/shotRed.png";
 import * as wallUrl from "./assets/barricadeWood.png";
-import * as barrelURL from "./assets/barrelBlack_top.png";
+import * as barrelURL from "./assets/barrelGreen_top.png";
 
 export class Assets {
     public scaleFactor = 1;
