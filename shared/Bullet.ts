@@ -1,4 +1,6 @@
+import { createContext } from "react";
 import { Client } from "../client/Client";
+import { BarrelState } from "./Barrel";
 import { EntityState } from "./Entity";
 import { Game, generateId } from "./Game";
 import { checkCircleCollision } from "./Physics";
@@ -15,7 +17,7 @@ export interface BulletState extends EntityState {
 }
 
 const BULLET_VELOCITY: number = 1500;
-const BULLET_RADIUS: number = 42;
+export const BULLET_RADIUS: number = 42;
 const BULLET_DAMAGE: number = 0.22;
 
 export function createBullet(
@@ -42,24 +44,23 @@ export function createBullet(
 }
 
 export function updateBullet(game: Game, state: BulletState, dt: number) {
-
     // Move bullet
     state.positionX += state.velocityX * dt;
     state.positionY += state.velocityY * dt;
 
-    if(state.positionX > game.arenaSize / 2) {
+    if (state.positionX > game.arenaSize / 2) {
         state.velocityX = -Math.abs(state.velocityX);
         didBounce(game, state);
     }
-    if(state.positionX < -game.arenaSize / 2) {
+    if (state.positionX < -game.arenaSize / 2) {
         state.velocityX = Math.abs(state.velocityX);
         didBounce(game, state);
     }
-    if(state.positionY > game.arenaSize / 2) {
+    if (state.positionY > game.arenaSize / 2) {
         state.velocityY = -Math.abs(state.velocityY);
         didBounce(game, state);
     }
-    if(state.positionY < -game.arenaSize / 2) {
+    if (state.positionY < -game.arenaSize / 2) {
         state.velocityY = Math.abs(state.velocityY);
         didBounce(game, state);
     }
@@ -121,7 +122,7 @@ function onPlayerCollision(
     delete game.state.bullets[state.id];
 }
 
-function didBounce(game: Game, state: BulletState){
+function didBounce(game: Game, state: BulletState) {
     state.bounces += 1;
 
     if (state.bounces > 1) {
