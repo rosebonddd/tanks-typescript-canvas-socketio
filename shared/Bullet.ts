@@ -1,6 +1,5 @@
 import { createContext } from "react";
 import { Client } from "../client/Client";
-import { BarrelState } from "./Barrel";
 import { EntityState } from "./Entity";
 import { Game, generateId } from "./Game";
 import { checkCircleCollision } from "./Physics";

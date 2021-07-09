@@ -13,9 +13,10 @@ export interface PlayerState extends EntityState {
     moveY: number;
     health: number;
     score: number;
+    speed: number;
 }
 
-let PLAYER_MOVE_SPEED: number = 500;
+export const PLAYER_MOVE_SPEED: number = 500;
 export const PLAYER_RADIUS: number = 38;
 export const BARREL_LENGTH: number = 45;
 
@@ -37,16 +38,16 @@ export function createPlayer(game: Game): PlayerState {
         moveY: 0,
         health: 1,
         score: 0,
+        speed: 500,
     };
     game.state.players[state.id] = state;
-    PLAYER_MOVE_SPEED = 500;
     return state;
 }
 
 export function updatePlayer(game: Game, state: PlayerState, dt: number) {
     // Move the player based on the move input
-    state.positionX += state.moveX * PLAYER_MOVE_SPEED * dt;
-    state.positionY += state.moveY * PLAYER_MOVE_SPEED * dt;
+    state.positionX += state.moveX * state.speed * dt;
+    state.positionY += state.moveY * state.speed * dt;
 
     // Restrain to bounds
     state.positionX = Math.max(
@@ -129,6 +130,12 @@ export function renderPlayer(
     );
     ctx.restore();
 
+    // draw teleporter
+    ctx.save();
+    ctx.fillStyle = "white";
+    ctx.fillRect(500, 500, 300, 300);
+    ctx.restore();
+
     // Draw score
     let scoreY = healthY - 25;
     ctx.save();
@@ -176,7 +183,7 @@ function onPlayerKill(game: Game, state: PlayerState, killerId?: number) {
         let killer = game.state.players[killerId];
         if (killer) {
             killer.score += 1;
-            PLAYER_MOVE_SPEED += 200;
+            killer.speed += 200;
         }
     }
 
