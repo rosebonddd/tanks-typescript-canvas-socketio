@@ -4,6 +4,12 @@ import { Utilities } from "./Utilities";
 import { EntityState } from "./Entity";
 import { BulletState, createBullet } from "./Bullet";
 
+// 1. check if shoot timer < 0
+// 2. create the bullet
+// 3. reset shoot timer to 2 sec
+
+//press space, shoottimer=2. after 2 sec you can shoot
+
 export interface PlayerState extends EntityState {
     id: number;
     positionX: number;
@@ -14,6 +20,7 @@ export interface PlayerState extends EntityState {
     health: number;
     score: number;
     speed: number;
+    shootTimer: number;
 }
 
 export const PLAYER_MOVE_SPEED: number = 500;
@@ -39,6 +46,7 @@ export function createPlayer(game: Game): PlayerState {
         health: 1,
         score: 0,
         speed: 500,
+        shootTimer: 0,
     };
     game.state.players[state.id] = state;
     return state;
@@ -66,6 +74,8 @@ export function updatePlayer(game: Game, state: PlayerState, dt: number) {
         state.positionY,
         game.arenaSize / 2 - PLAYER_RADIUS
     );
+
+    state.shootTimer -= dt;
 }
 
 export function renderPlayer(
@@ -145,18 +155,21 @@ export function renderPlayer(
 }
 
 export function shoot(game: Game, state: PlayerState): BulletState {
-    let dirX = Math.cos(state.aimDir);
-    let dirY = -Math.sin(state.aimDir);
+    if (state.shootTimer < 0) {
+        state.shootTimer = 2;
+        let dirX = Math.cos(state.aimDir);
+        let dirY = -Math.sin(state.aimDir);
 
-    let bulletX = state.positionX + dirX * BARREL_LENGTH;
-    let bulletY = state.positionY + dirY * BARREL_LENGTH;
-    return createBullet(
-        game,
-        state.id,
-        bulletX,
-        bulletY,
-        Math.atan2(dirY, dirX)
-    );
+        let bulletX = state.positionX + dirX * BARREL_LENGTH;
+        let bulletY = state.positionY + dirY * BARREL_LENGTH;
+        return createBullet(
+            game,
+            state.id,
+            bulletX,
+            bulletY,
+            Math.atan2(dirY, dirX)
+        );
+    }
 }
 
 export function damagePlayer(
