@@ -5,13 +5,13 @@ import { Game, generateId } from "./Game";
 import { checkCircleCollision } from "./Physics";
 import { PlayerState, PLAYER_RADIUS } from "./Player";
 
-export const EXPLOSION_RADIUS: number = 24;
-
 export interface ExplosionState extends EntityState {
     id: number;
     positionX: number;
     positionY: number;
 }
+
+const EXPLOSION_RADIUS: number = 24;
 
 export function createExplosion(
     game: Game,
@@ -26,6 +26,12 @@ export function createExplosion(
     game.state.explosions[state.id] = state;
     return state;
 }
+
+export function updateExplosion(
+    game: Game,
+    state: ExplosionState,
+    dt: number
+) {}
 
 export function renderExplosion(
     client: Client,
@@ -50,9 +56,3 @@ export function renderExplosion(
 
     ctx.restore();
 }
-
-export function updateExplosion(
-    game: Game,
-    state: ExplosionState,
-    dt: number
-) {}

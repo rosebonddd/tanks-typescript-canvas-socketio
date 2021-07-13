@@ -6,14 +6,14 @@ import { Game, generateId } from "./Game";
 import { checkCircleCollision } from "./Physics";
 import { PlayerState, PLAYER_RADIUS } from "./Player";
 
-export const BARREL_RADIUS: number = 24;
-
 export interface BarrelState extends EntityState {
     id: number;
     positionX: number;
     positionY: number;
     health: number;
 }
+
+const BARREL_RADIUS: number = 24;
 
 export function createBarrel(
     game: Game,
@@ -28,6 +28,40 @@ export function createBarrel(
     };
     game.state.barrels[state.id] = state;
     return state;
+}
+
+export function updateBarrel(game: Game, state: BarrelState, dt: number) {
+    for (let playerId in game.state.players) {
+        let player = game.state.players[playerId];
+        if (
+            checkCircleCollision(
+                state.positionX,
+                state.positionY,
+                BARREL_RADIUS,
+                player.positionX,
+                player.positionY,
+                PLAYER_RADIUS
+            )
+        ) {
+            onPlayerCollide(game, state, player);
+        }
+    }
+
+    for (let bulletId in game.state.bullets) {
+        let bullet = game.state.bullets[bulletId];
+        if (
+            checkCircleCollision(
+                state.positionX,
+                state.positionY,
+                BARREL_RADIUS,
+                bullet.positionX,
+                bullet.positionY,
+                BULLET_RADIUS
+            )
+        ) {
+            onBulletCollision(game, state, bullet);
+        }
+    }
 }
 
 export function renderBarrel(
@@ -52,11 +86,7 @@ export function renderBarrel(
     ctx.restore();
 }
 
-export function onPlayerCollide(
-    game: Game,
-    state: BarrelState,
-    player: PlayerState
-) {
+function onPlayerCollide(game: Game, state: BarrelState, player: PlayerState) {
     let dirX = player.positionX - state.positionX;
     let dirY = player.positionY - state.positionY;
     let mag = Math.sqrt(dirY * dirY + dirX * dirX);
@@ -65,40 +95,7 @@ export function onPlayerCollide(
     player.positionY = state.positionY + (dirY / mag) * offset;
 }
 
-export function updateBarrel(game: Game, state: BarrelState, dt: number) {
-    for (let playerId in game.state.players) {
-        let player = game.state.players[playerId];
-        if (
-            checkCircleCollision(
-                state.positionX,
-                state.positionY,
-                BARREL_RADIUS,
-                player.positionX,
-                player.positionY,
-                PLAYER_RADIUS
-            )
-        ) {
-            onPlayerCollide(game, state, player);
-        }
-        for (let bulletId in game.state.bullets) {
-            let bullet = game.state.bullets[bulletId];
-            if (
-                checkCircleCollision(
-                    state.positionX,
-                    state.positionY,
-                    BARREL_RADIUS,
-                    bullet.positionX,
-                    bullet.positionY,
-                    BULLET_RADIUS
-                )
-            ) {
-                onBulletCollision(game, state, bullet);
-            }
-        }
-    }
-}
-
-export function onBulletCollision(
+function onBulletCollision(
     game: Game,
     state: BarrelState,
     bullet: BulletState
