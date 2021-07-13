@@ -113,10 +113,14 @@ function update(client: Client) {
         // Determine move direction
         let moveX = 0;
         let moveY = 0;
-        if (client.input.isKeyDown("a")) moveX -= 1;
-        if (client.input.isKeyDown("d")) moveX += 1;
-        if (client.input.isKeyDown("s")) moveY -= 1;
-        if (client.input.isKeyDown("w")) moveY += 1;
+        if (client.input.isKeyDown("a") || client.input.isKeyDown("4"))
+            moveX -= 1;
+        if (client.input.isKeyDown("d") || client.input.isKeyDown("6"))
+            moveX += 1;
+        if (client.input.isKeyDown("s") || client.input.isKeyDown("2"))
+            moveY -= 1;
+        if (client.input.isKeyDown("w") || client.input.isKeyDown("8"))
+            moveY += 1;
 
         // Determine rotation
         let aimDir = Math.atan2(
@@ -284,7 +288,7 @@ function renderMenu(client: Client, ctx: CanvasRenderingContext2D) {
         let instructions = [
             "Controls:",
             "Aim: Mouse",
-            "Move: WASD",
+            "Move: WASD and 8426",
             "Fire: Space",
         ];
         ctx.textAlign = "left";

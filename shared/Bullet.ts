@@ -13,6 +13,7 @@ export interface BulletState extends EntityState {
     velocityX: number;
     velocityY: number;
     bounces: number;
+    super: number;
 }
 
 const BULLET_VELOCITY: number = 1500;
@@ -37,6 +38,7 @@ export function createBullet(
         velocityX: velocityX,
         velocityY: velocityY,
         bounces: 0,
+        super: 0,
     };
     game.state.bullets[state.id] = state;
     return state;

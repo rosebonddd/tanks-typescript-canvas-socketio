@@ -130,12 +130,6 @@ export function renderPlayer(
     );
     ctx.restore();
 
-    // draw teleporter
-    ctx.save();
-    ctx.fillStyle = "white";
-    ctx.fillRect(500, 500, 300, 300);
-    ctx.restore();
-
     // Draw score
     let scoreY = healthY - 25;
     ctx.save();
